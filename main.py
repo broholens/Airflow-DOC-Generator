@@ -21,7 +21,7 @@ urls = []
 logger.info('start to get airflow documents url')
 resp = requests.get(home_page)
 tree = HTML(resp.text)
-for url_suffix in tree.xpath('//div[@class="toctree"]//a/@href'):
+for url_suffix in tree.xpath('//div[@class="td-sidebar"]/div[@class="toctree"]//a/@href'):
     url = home_page + url_suffix
     urls.append(url)
 
