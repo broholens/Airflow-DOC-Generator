@@ -4,6 +4,7 @@ import logging
 import pdfkit  # pip install pdfkit
 import requests  # pip install requests
 from lxml.etree import HTML  # pip install lxml
+from PyPDF2 import PdfFileMerger  # pip install PyPDF2
 
 logging.basicConfig(
     level=logging.INFO,
@@ -38,3 +39,15 @@ for index, url in enumerate(urls):
         logger.info(f'page {index} download success, url is {url}')
     except:
         logger.error(f'page {index} download failed, url is {url}')
+
+# merge pages to one
+pdf_merger = PdfFileMerger()
+logger.info('start to merge pdfs to one')
+for index in range(len(urls)):
+    filename = f'{tmp_dir}/{index}.pdf'
+    with open(filename, 'rb') as f:
+        pdf_merger.append(f, import_bookmarks=False)
+
+with open(f'airflow_doc_{airflow_version}.pdf', 'wb') as f:
+    pdf_merger.write(f)
+logger.info('export document success')
